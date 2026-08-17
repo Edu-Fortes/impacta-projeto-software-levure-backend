@@ -7,3 +7,62 @@ generator client {
   output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
+
+enum StarterStatus {
+  HEALTHY // Saudável
+  ATTENTION // Atenção
+  NEW // Novo
+}
+
+model Starter {
+  id        String        @id @default(uuid())
+  name      String
+  flourType String // ex: "Trigo branco", "Centeio integral"
+  location  String // ex: "Bancada da cozinha", "Armário superior"
+  notes     String?       @db.Text
+  status    StarterStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  feedings    Feeding[]
+  aiDiagnoses AiDiagnosis[]
+
+  @@map("starters")
+}
+
+model Feeding {
+  id        String  @id @default(uuid())
+  starterId String
+  starter   Starter @relation(fields: [starterId], references: [id], onDelete: Cascade)
+
+  ratio          String // ex: "1:2:2", "1:1:1"
+  starterWeightG Float // Gramas de fermento (isca)
+  waterWeightG   Float // Gramas de água
+  flourWeightG   Float // Gramas de farinha
+  totalWeightG   Float // Gramas totais da mistura
+
+  ambientTempC         Float // Temperatura ambiente em °C
+  estimatedPeakMinutes Int // Tempo estimado até o pico (ex: 450 para 7h30min)
+  estimatedPeakTime    DateTime // Horário exato estimado para o pico
+
+  fedAt     DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@map("feedings")
+}
+
+model AiDiagnosis {
+  id        String  @id @default(uuid())
+  starterId String
+  starter   Starter @relation(fields: [starterId], references: [id], onDelete: Cascade)
+
+  score        Int // 0 a 100 (ex: 90)
+  rating       String // ex: "Excelente", "Atenção"
+  summary      String   @db.Text // Texto principal
+  observations String[] // Lista de tópicos de observação
+  tips         String[] // Lista de dicas de manutenção
+
+  generatedAt DateTime @default(now())
+
+  @@map("ai_diagnoses")
+}
