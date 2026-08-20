@@ -11,6 +11,31 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - levure-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+        PORT: ${PORT}
+    container_name: levure_backend
+    restart: always
+    ports:
+      - '3001:3001'
+    environment:
+      DATABASE_URL: 'postgresql://postgres:postgrespassword@postgres:5432/levure_db?schema=public'
+      PORT: 3001
+    depends_on:
+      - postgres
+    networks:
+      - levure-network
 
 volumes:
   postgres_data:
+
+networks:
+  levure-network:
+    driver: bridge
