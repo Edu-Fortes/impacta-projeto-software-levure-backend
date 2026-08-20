@@ -65,8 +65,8 @@ export class StartersService {
     const [totalStarters, healthyCount, attentionCount, newCount] =
       await Promise.all([
         this.prisma.starter.count(),
-        this.prisma.starter.count({ where: { status: 'HEALTHY' } }),
-        this.prisma.starter.count({ where: { status: 'ATTENTION' } }),
+        this.prisma.starter.count({ where: { status: 'ACTIVE' } }),
+        this.prisma.starter.count({ where: { status: 'FRIDGE' } }),
         this.prisma.starter.count({ where: { status: 'NEW' } }),
       ]);
 
