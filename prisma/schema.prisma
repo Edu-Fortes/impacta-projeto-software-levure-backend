@@ -1,0 +1,28 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StarterStatus {
+  ACTIVE // Ativo
+  FRIDGE // Geladeira
+  NEW // Novo
+}
+
+model Starter {
+  id        String        @id @default(uuid())
+  name      String
+  flourType String // ex: "Trigo branco", "Centeio integral"
+  location  String // ex: "Bancada da cozinha", "Armário superior"
+  notes     String?       @db.Text
+  status    StarterStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("starters")
+}
