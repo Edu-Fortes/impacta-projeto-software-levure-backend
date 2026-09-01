@@ -33,6 +33,11 @@ export class StartersService {
   async findOne(id: string) {
     const starter = await this.prisma.starter.findUnique({
       where: { id },
+      include: {
+        feedings: {
+          orderBy: { fedAt: 'desc' },
+        },
+      },
     });
 
     if (!starter) {
