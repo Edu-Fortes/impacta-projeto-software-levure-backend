@@ -9,9 +9,16 @@ datasource db {
 }
 
 enum StarterStatus {
-  ACTIVE // Ativo
-  FRIDGE // Geladeira
-  NEW // Novo
+  ACTIVE
+  FRIDGE
+  NEW
+}
+
+enum AromaProfile {
+  FRUITY
+  ALCOHOLIC
+  ACIDIC
+  BALANCED
 }
 
 model Starter {
@@ -24,5 +31,38 @@ model Starter {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
+  feedings Feeding[]
+
   @@map("starters")
+}
+
+model Feeding {
+  id        String  @id @default(uuid())
+  starterId String
+  starter   Starter @relation(fields: [starterId], references: [id], onDelete: Cascade)
+
+  // Parâmetros de Entrada da Alimentação
+  ratio          String // ex: "1:2:2", "1:1:1"
+  starterWeightG Float
+  waterWeightG   Float
+  flourWeightG   Float
+  totalWeightG   Float // Peso total da mistura (g)
+  ambientTempC   Float
+
+  // Estimativa Calculada pelo Sistema
+  estimatedPeakMinutes Int // Tempo estimado até o pico em minutos
+  estimatedPeakTime    DateTime // Horário previsto do pico
+
+  // Registro Real de Pico
+  actualPeakTime    DateTime? // Momento exato em que atingiu o pico
+  actualDurationMin Int? // Duração real calculada (actualPeakTime - fedAt)
+  growthMultiplier  Float? // Fator de crescimento (ex: 2.0 para 2x, 3.0 para 3x)
+  aromaProfile      AromaProfile? // Aroma observado (opcional)
+  notes             String?       @db.Text
+
+  fedAt     DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feedings")
 }
