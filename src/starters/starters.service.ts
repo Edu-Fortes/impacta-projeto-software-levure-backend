@@ -27,6 +27,12 @@ export class StartersService {
     return this.prisma.starter.findMany({
       where,
       orderBy: { updatedAt: 'desc' },
+      include: {
+        feedings: {
+          take: 1,
+          orderBy: { fedAt: 'desc' },
+        },
+      },
     });
   }
 
