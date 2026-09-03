@@ -73,22 +73,18 @@ export class StartersService {
   }
 
   async getDashboardSummary() {
-    const [
-      activeStartersCount,
-      healthyCount,
-      attentionCount,
-      totalFeedingsCount,
-    ] = await Promise.all([
-      this.prisma.starter.count(),
-      this.prisma.starter.count({ where: { status: 'ACTIVE' } }),
-      this.prisma.starter.count({ where: { status: 'FRIDGE' } }),
-      this.prisma.feeding.count(),
-    ]);
+    const [activeStartersCount, healthyCount, fridgeCount, totalFeedingsCount] =
+      await Promise.all([
+        this.prisma.starter.count(),
+        this.prisma.starter.count({ where: { status: 'ACTIVE' } }),
+        this.prisma.starter.count({ where: { status: 'FRIDGE' } }),
+        this.prisma.feeding.count(),
+      ]);
 
     return {
       activeStartersCount,
       healthyCount,
-      attentionCount,
+      fridgeCount,
       totalFeedingsCount,
     };
   }
