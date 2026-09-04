@@ -27,12 +27,23 @@ export class StartersService {
     return this.prisma.starter.findMany({
       where,
       orderBy: { updatedAt: 'desc' },
+      include: {
+        feedings: {
+          take: 1,
+          orderBy: { fedAt: 'desc' },
+        },
+      },
     });
   }
 
   async findOne(id: string) {
     const starter = await this.prisma.starter.findUnique({
       where: { id },
+      include: {
+        feedings: {
+          orderBy: { fedAt: 'desc' },
+        },
+      },
     });
 
     if (!starter) {
@@ -62,19 +73,19 @@ export class StartersService {
   }
 
   async getDashboardSummary() {
-    const [totalStarters, healthyCount, attentionCount, newCount] =
+    const [activeStartersCount, healthyCount, fridgeCount, totalFeedingsCount] =
       await Promise.all([
         this.prisma.starter.count(),
         this.prisma.starter.count({ where: { status: 'ACTIVE' } }),
         this.prisma.starter.count({ where: { status: 'FRIDGE' } }),
-        this.prisma.starter.count({ where: { status: 'NEW' } }),
+        this.prisma.feeding.count(),
       ]);
 
     return {
-      activeStartersCount: totalStarters,
+      activeStartersCount,
       healthyCount,
-      attentionCount,
-      newCount,
+      fridgeCount,
+      totalFeedingsCount,
     };
   }
 }
