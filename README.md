@@ -14,14 +14,15 @@ API RESTful desenvolvida para o gerenciamento, cálculo de ciclos e monitorament
 
 ---
 
-## Arquitetura do Projeto (Sprint 1)
+## Arquitetura do Projeto
 
 O backend segue a arquitetura modular do NestJS com separação estrita de responsabilidades:
 
-- `src/starters/`: Módulo de gerenciamento de fermentos (CRUD completo, listagem com busca e sumário analítico).
+- `src/starters/`: Módulo de gestão de fermentos (CRUD completo, listagem com busca e sumário analítico do painel).
+- `src/feedings/`: Módulo de gerenciamento de alimentações (cálculo de proporções, registro transacional e listagem do histórico).
 - `src/prisma/`: Camada de persistência e cliente global de banco de dados.
-- `prisma/schema.prisma`: Modelagem relacional do banco.
-- `prisma/seed.ts`: Povoamento de dados iniciais para demonstração.
+- `prisma/schema.prisma`: Modelagem relacional (`Starter` e `Feeding` com relação 1:N).
+- `prisma/seed.ts`: Povoamento de dados iniciais demonstrativos com histórico de alimentações.
 
 ---
 
