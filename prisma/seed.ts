@@ -69,13 +69,13 @@ async function main() {
         totalWeightG: 250,
         ambientTempC: 24,
         estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-08-17T16:00:00Z'),
-        actualPeakTime: new Date('2026-08-17T16:00:00Z'),
+        estimatedPeakTime: new Date('2026-11-03T16:00:00Z'),
+        actualPeakTime: new Date('2026-11-03T16:00:00Z'),
         actualDurationMin: 480, // 8h
         growthMultiplier: 2.8,
         aromaProfile: AromaProfile.BALANCED,
         notes: 'Pico vigoroso e cheiro frutado suave.',
-        fedAt: new Date('2026-08-17T08:00:00Z'),
+        fedAt: new Date('2026-11-03T08:00:00Z'),
       },
       {
         starterId: voAmalia.id,
@@ -86,13 +86,13 @@ async function main() {
         totalWeightG: 250,
         ambientTempC: 24,
         estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-08-16T16:00:00Z'),
-        actualPeakTime: new Date('2026-08-16T15:50:00Z'),
+        estimatedPeakTime: new Date('2026-11-02T16:00:00Z'),
+        actualPeakTime: new Date('2026-11-02T15:50:00Z'),
         actualDurationMin: 470, // 7h50min
         growthMultiplier: 2.6,
         aromaProfile: AromaProfile.BALANCED,
         notes: 'Mantido na bancada durante todo o ciclo.',
-        fedAt: new Date('2026-08-16T08:00:00Z'),
+        fedAt: new Date('2026-11-02T08:00:00Z'),
       },
       {
         starterId: voAmalia.id,
@@ -103,13 +103,13 @@ async function main() {
         totalWeightG: 300,
         ambientTempC: 26,
         estimatedPeakMinutes: 442,
-        estimatedPeakTime: new Date('2026-08-12T15:22:00Z'),
-        actualPeakTime: new Date('2026-08-12T15:15:00Z'),
+        estimatedPeakTime: new Date('2026-11-01T15:22:00Z'),
+        actualPeakTime: new Date('2026-11-01T15:15:00Z'),
         actualDurationMin: 435, // 7h15min (acelerou devido ao calor de 26°C)
         growthMultiplier: 3.0,
         aromaProfile: AromaProfile.FRUITY,
         notes: 'Dia mais quente, atingiu quase o triplo do volume.',
-        fedAt: new Date('2026-08-12T08:00:00Z'),
+        fedAt: new Date('2026-11-01T08:00:00Z'),
       },
       {
         starterId: voAmalia.id,
@@ -120,13 +120,13 @@ async function main() {
         totalWeightG: 250,
         ambientTempC: 24,
         estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-08-10T16:00:00Z'),
-        actualPeakTime: new Date('2026-08-10T16:05:00Z'),
+        estimatedPeakTime: new Date('2026-10-31T16:00:00Z'),
+        actualPeakTime: new Date('2026-10-31T16:05:00Z'),
         actualDurationMin: 485, // 8h05min
         growthMultiplier: 2.7,
         aromaProfile: AromaProfile.BALANCED,
         notes: 'Estrutura de alvéolos muito consistente.',
-        fedAt: new Date('2026-08-10T08:00:00Z'),
+        fedAt: new Date('2026-10-31T08:00:00Z'),
       },
       {
         starterId: voAmalia.id,
@@ -137,13 +137,13 @@ async function main() {
         totalWeightG: 250,
         ambientTempC: 23,
         estimatedPeakMinutes: 500,
-        estimatedPeakTime: new Date('2026-08-08T16:20:00Z'),
-        actualPeakTime: new Date('2026-08-08T16:24:00Z'),
+        estimatedPeakTime: new Date('2026-10-30T16:20:00Z'),
+        actualPeakTime: new Date('2026-10-30T16:24:00Z'),
         actualDurationMin: 504, // 8h24min (mais lento por estar 23°C)
         growthMultiplier: 2.5,
         aromaProfile: AromaProfile.BALANCED,
         notes: 'Temperatura ambiente um pouco mais amena.',
-        fedAt: new Date('2026-08-08T08:00:00Z'),
+        fedAt: new Date('2026-10-30T08:00:00Z'),
       },
       {
         starterId: voAmalia.id,
@@ -154,13 +154,13 @@ async function main() {
         totalWeightG: 250,
         ambientTempC: 24,
         estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-08-05T16:00:00Z'),
-        actualPeakTime: new Date('2026-08-05T16:00:00Z'),
+        estimatedPeakTime: new Date('2026-10-29T16:00:00Z'),
+        actualPeakTime: new Date('2026-10-29T16:00:00Z'),
         actualDurationMin: 480, // 8h
         growthMultiplier: 2.7,
         aromaProfile: AromaProfile.BALANCED,
         notes: 'Alimentação de rotina semanal.',
-        fedAt: new Date('2026-08-05T08:00:00Z'),
+        fedAt: new Date('2026-10-29T08:00:00Z'),
       },
     ],
   });
@@ -178,12 +178,12 @@ async function main() {
       totalWeightG: 200,
       ambientTempC: 25,
       estimatedPeakMinutes: 432,
-      estimatedPeakTime: new Date('2026-08-16T15:12:00Z'),
-      actualPeakTime: new Date('2026-08-16T14:40:00Z'),
+      estimatedPeakTime: new Date('2026-11-02T15:12:00Z'),
+      actualPeakTime: new Date('2026-11-02T14:40:00Z'),
       actualDurationMin: 400,
       growthMultiplier: 2.2,
       aromaProfile: AromaProfile.ACIDIC,
-      fedAt: new Date('2026-08-16T08:00:00Z'),
+      fedAt: new Date('2026-11-02T08:00:00Z'),
     },
   });
 
@@ -198,12 +198,10 @@ async function main() {
       totalWeightG: 150,
       ambientTempC: 24,
       estimatedPeakMinutes: 270,
-      estimatedPeakTime: new Date('2026-08-16T12:30:00Z'),
-      fedAt: new Date('2026-08-16T08:00:00Z'),
+      estimatedPeakTime: new Date('2026-11-02T12:30:00Z'),
+      fedAt: new Date('2026-11-02T08:00:00Z'),
     },
   });
-
-  console.log('Seed da Sprint 2 executado com sucesso!');
 }
 
 main()
