@@ -6,6 +6,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { StartersModule } from './starters/starters.module';
 import { FeedingsModule } from './feedings/feedings.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FeedingsModule } from './feedings/feedings.module';
     PrismaModule,
     StartersModule,
     FeedingsModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
