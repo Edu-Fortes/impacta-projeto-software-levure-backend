@@ -1,0 +1,34 @@
+{
+  "id": "beaa0c76-db50-4d98-a05a-3c8b8b5b0aab",
+  "starterId": "dad46569-7edb-4e96-ba02-617d64a0b6c8",
+  "healthScore": 65,
+  "status": "NEEDS_ATTENTION",
+  "summary": "O fermento apresenta alta atividade enzimática e metabólica, mas sofre com subnutrição devido a proporções baixas para a farinha de centeio integral. A acidez acentuada e a degradação rápida do glúten indicam que o alimento se esgota antes do tempo ideal.",
+  "vigorObservation": "O crescimento atingiu apenas 1.8x a 1.9x, ficando abaixo da meta de 2.5x. O tempo de pico foi acelerado (cerca de 5 a 6 horas), o que demonstra fome crônica e alta atividade microbiana.",
+  "acidityObservation": "O perfil aromático ácido e pungente, aliado à perda rápida de sustentação e degradação do glúten, confirma que a cultura está consumindo as reservas muito rapidamente e produzindo excesso de ácidos.",
+  "temperatureImpact": "A temperatura ambiente entre 25°C e 26°C acelerou o metabolismo das leveduras e bactérias, encurtando ainda mais o ciclo de vida da cultura com a proporção atual.",
+  "readyToBake": false,
+  "bakingReason": "A estrutura de glúten está muito enfraquecida e a acidez está excessiva, o que resultaria em um pão denso, com sabor excessivamente ácido e sem estrutura.",
+  "recommendedRatio": "1:3:3",
+  "flourTypeHint": "Mantenha o centeio integral, mas considere adicionar uma porcentagem de farinha de trigo forte (alta proteína) para melhorar a retenção de gás e a estrutura da matriz.",
+  "targetAmbientTemp": "22°C a 24°C",
+  "recommendationsJson": [
+    {
+      "title": "Aumentar a proporção de alimentação",
+      "priority": "HIGH",
+      "description": "Mude a proporção de 1:2:2 para 1:3:3 ou até 1:4:4 para fornecer mais alimento e retardar a exaustão da cultura."
+    },
+    {
+      "title": "Ajustar a temperatura ambiente",
+      "priority": "MEDIUM",
+      "description": "Tente manter o fermento em um local ligeiramente mais fresco para desacelerar o metabolismo excessivo e equilibrar a flora láctica."
+    },
+    {
+      "title": "Reforço com trigo branco",
+      "priority": "HIGH",
+      "description": "Adicione 20% de farinha de trigo branca forte na próxima alimentação para ajudar a restaurar a força do glúten degradado."
+    }
+  ],
+  "analyzedFeedingsCount": 2,
+  "createdAt": "2026-11-13T21:53:06.852Z"
+}

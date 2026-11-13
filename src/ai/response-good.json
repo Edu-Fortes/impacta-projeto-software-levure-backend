@@ -1,0 +1,29 @@
+{
+  "id": "0aaa43c3-1e7c-4180-a39e-095b2c442fbe",
+  "starterId": "ed485368-48d3-457a-9e49-bd454aa9776c",
+  "healthScore": 95,
+  "status": "EXCELLENT",
+  "summary": "O fermento Vó Amália apresenta excelente saúde e vitalidade, ultrapassando consistentemente 2.5x de crescimento com perfis aromáticos equilibrados e frutados. Sua atividade microbiana está perfeitamente sincronizada e pronta para panificação de alta qualidade.",
+  "vigorObservation": "O crescimento tem se mantido de forma estável acima de 2.5x e chegou a triplicar (3x) em dias ligeiramente mais quentes. O tempo até o pico demonstra um metabolismo rápido, previsível e altamente vigoroso.",
+  "acidityObservation": "Os aromas relatados são balanceados e frutados, com notas doces e leveduradas, indicando ausência de subnutrição, estresse ou excesso de acidez acética indesejada.",
+  "temperatureImpact": "A temperatura ambiente variando entre 23°C e 26°C tem mantido o ciclo metabólico ideal, acelerando levemente o pico nos dias mais quentes sem causar exaustão precoce da cultura.",
+  "readyToBake": true,
+  "bakingReason": "O fermento atingiu o ápice com excelente volume (2.8x), apresenta aromas agradáveis e está no momento perfeito de atividade para garantir uma fermentação vigorosa no pão.",
+  "recommendedRatio": "1:2:2",
+  "flourTypeHint": "Continue utilizando farinha de trigo branca de boa qualidade com bom teor de proteína para sustentar a estrutura alveolar.",
+  "targetAmbientTemp": "24°C a 26°C",
+  "recommendationsJson": [
+    {
+      "title": "Aproveite para assar",
+      "priority": "HIGH",
+      "description": "Utilize o fermento no pico atual para preparar a sua massa, pois ele está no ápice da atividade das leveduras."
+    },
+    {
+      "title": "Manutenção da rotina",
+      "priority": "LOW",
+      "description": "Mantenha a proporção atual de 1:2:2, que tem se mostrado ideal para a rotina e o vigor desta cultura."
+    }
+  ],
+  "analyzedFeedingsCount": 6,
+  "createdAt": "2026-11-13T18:32:51.431Z"
+}
