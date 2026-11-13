@@ -68,14 +68,16 @@ Analise o histórico de alimentações do fermento a seguir e forneça um diagn�
 ${JSON.stringify(payloadContext, null, 2)}`;
 
     try {
-      const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          systemInstruction:
-            'Você é o assistente biológico do Levure. Avalie o vigor biológico com base no volume alcançado (>2.5x é excelente), tempo até o pico e aromas informados (aromas acéticos ou alcoólicos recorrentes indicam subnutrição e pedem proporções maiores como 1:3:3 ou 1:4:4). Responda sempre em português do Brasil estritamente no esquema JSON exigido.',
-          responseMimeType: 'application/json',
-          responseSchema: {
+      const response = await this.ai.interactions.create({
+        model: 'gemini-3.5-flash-lite',
+        input: prompt,
+        // config: {
+        system_instruction:
+          'Você é o assistente biológico do Levure. Avalie o vigor biológico com base no volume alcançado (>2.5x é excelente), tempo até o pico e aromas informados (aromas acéticos ou alcoólicos recorrentes indicam subnutrição e pedem proporções maiores como 1:3:3 ou 1:4:4). Responda sempre em português do Brasil estritamente no esquema JSON exigido.',
+        response_format: {
+          type: 'text',
+          mime_type: 'application/json',
+          schema: {
             type: Type.OBJECT,
             properties: {
               healthScore: {
@@ -158,10 +160,11 @@ ${JSON.stringify(payloadContext, null, 2)}`;
             ],
           },
         },
+        // },
       });
 
       const parsed: AiHealthAnalysisResponse = JSON.parse(
-        response.text || '{}',
+        response.output_text || '{}',
       );
 
       // Persistir o diagnóstico no banco
