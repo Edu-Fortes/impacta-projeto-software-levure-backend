@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@google/genai": "^3.3.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
@@ -83,6 +84,7 @@
     "prisma@7.9.1": true,
     "@prisma/engines@7.9.1": true,
     "@scarf/scarf@1.4.0": true,
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "protobufjs@7.6.6": true
   }
 }
