@@ -12,11 +12,22 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('Limpando dados anteriores...');
+  console.log('Limpando registros anteriores...');
+  await prisma.healthAnalysis.deleteMany();
   await prisma.feeding.deleteMany();
   await prisma.starter.deleteMany();
 
-  console.log('Criando fermentos (Starters)...');
+  const now = new Date();
+
+  // Helper para criar datas relativas em dias e horas
+  const daysAgo = (days: number, hoursOffset = 0) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - days);
+    d.setHours(d.getHours() - hoursOffset);
+    return d;
+  };
+
+  console.log('Criando fermentos...');
 
   const voAmalia = await prisma.starter.create({
     data: {
@@ -24,9 +35,9 @@ async function main() {
       flourType: 'Trigo branco',
       location: 'Bancada da cozinha',
       notes:
-        'Fermento de família, mantido há quase um ano. Dobra de volume com facilidade.',
-      status: StarterStatus.ACTIVE,
-      createdAt: new Date('2025-11-30T10:00:00Z'),
+        'Cultivo familiar mantido com alimentação regular. Ótimo vigor e alvéolos estruturados.',
+      status: StarterStatus.HEALTHY,
+      createdAt: daysAgo(120),
     },
   });
 
@@ -35,9 +46,10 @@ async function main() {
       name: 'Centeio Selvagem',
       flourType: 'Centeio integral',
       location: 'Armário superior',
-      notes: 'Fermento de centeio 100%, acidificação rápida.',
-      status: StarterStatus.FRIDGE,
-      createdAt: new Date('2026-01-15T14:00:00Z'),
+      notes:
+        'Cultura 100% centeio integral. Fermentação vigorosa, porém com acidez muito acentuada recentemente.',
+      status: StarterStatus.ATTENTION,
+      createdAt: daysAgo(60),
     },
   });
 
@@ -46,148 +58,151 @@ async function main() {
       name: 'Levain Integral',
       flourType: 'Trigo integral',
       location: 'Bancada da cozinha',
-      notes: 'Iniciado recentemente com farinha integral orgânica.',
+      notes: 'Cultivo jovem iniciado recentemente para testes.',
       status: StarterStatus.NEW,
-      createdAt: new Date('2026-08-10T09:00:00Z'),
+      createdAt: daysAgo(5),
     },
   });
+
+  console.log('Populando histórico calibrado da Vó Amália...');
+
+  // 6 registros na proporção 1:2:2 nos últimos dias (atinge o critério de calibração e análise robusta)
+  const amaliaFeedings = [
+    {
+      days: 0,
+      hours: 4,
+      temp: 24,
+      dur: 460,
+      vol: 2.8,
+      aroma: AromaProfile.BALANCED,
+      notes:
+        'Alimentação feita hoje pela manhã. Fermento no ápice com aroma doce e levedurado.',
+    },
+    {
+      days: 1,
+      hours: 10,
+      temp: 24,
+      dur: 470,
+      vol: 2.7,
+      aroma: AromaProfile.BALANCED,
+      notes: 'Ótima resposta na bancada.',
+    },
+    {
+      days: 2,
+      hours: 12,
+      temp: 26,
+      dur: 430,
+      vol: 3.0,
+      aroma: AromaProfile.FRUITY,
+      notes: 'Dia mais quente, triplicou o volume e antecipou o pico.',
+    },
+    {
+      days: 3,
+      hours: 14,
+      temp: 24,
+      dur: 480,
+      vol: 2.6,
+      aroma: AromaProfile.BALANCED,
+      notes: 'Alimentação de manutenção.',
+    },
+    {
+      days: 4,
+      hours: 14,
+      temp: 23,
+      dur: 500,
+      vol: 2.5,
+      aroma: AromaProfile.BALANCED,
+      notes: 'Temperatura amena, demorou 8h20min para o ápice.',
+    },
+    {
+      days: 6,
+      hours: 15,
+      temp: 24,
+      dur: 480,
+      vol: 2.7,
+      aroma: AromaProfile.FRUITY,
+      notes: 'Refresco semanal habitual.',
+    },
+  ];
+
+  for (const f of amaliaFeedings) {
+    const fedTime = daysAgo(f.days, f.hours);
+    const peakTime = new Date(fedTime.getTime() + f.dur * 60 * 1000);
+
+    await prisma.feeding.create({
+      data: {
+        starterId: voAmalia.id,
+        ratio: '1:2:2',
+        starterWeightG: 40,
+        waterWeightG: 80,
+        flourWeightG: 80,
+        totalWeightG: 200,
+        ambientTempC: f.temp,
+        estimatedPeakMinutes: f.dur,
+        estimatedPeakTime: peakTime,
+        actualPeakTime: peakTime,
+        actualDurationMin: f.dur,
+        growthMultiplier: f.vol,
+        aromaProfile: f.aroma,
+        notes: f.notes,
+        fedAt: fedTime,
+      },
+    });
+  }
 
   console.log(
-    'Populando histórico calibrado para Vó Amália (6 registros 1:2:2)...',
+    'Populando dados para Centeio Selvagem (com acúmulo de acidez)...',
   );
 
-  // Histórico com 6 medições reais de pico na proporção 1:2:2
-  // Média real calibrada a 24°C: aprox. 480 min (8h)
-  await prisma.feeding.createMany({
-    data: [
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 50,
-        waterWeightG: 100,
-        flourWeightG: 100,
-        totalWeightG: 250,
-        ambientTempC: 24,
-        estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-11-03T16:00:00Z'),
-        actualPeakTime: new Date('2026-11-03T16:00:00Z'),
-        actualDurationMin: 480, // 8h
-        growthMultiplier: 2.8,
-        aromaProfile: AromaProfile.BALANCED,
-        notes: 'Pico vigoroso e cheiro frutado suave.',
-        fedAt: new Date('2026-11-03T08:00:00Z'),
-      },
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 50,
-        waterWeightG: 100,
-        flourWeightG: 100,
-        totalWeightG: 250,
-        ambientTempC: 24,
-        estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-11-02T16:00:00Z'),
-        actualPeakTime: new Date('2026-11-02T15:50:00Z'),
-        actualDurationMin: 470, // 7h50min
-        growthMultiplier: 2.6,
-        aromaProfile: AromaProfile.BALANCED,
-        notes: 'Mantido na bancada durante todo o ciclo.',
-        fedAt: new Date('2026-11-02T08:00:00Z'),
-      },
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 60,
-        waterWeightG: 120,
-        flourWeightG: 120,
-        totalWeightG: 300,
-        ambientTempC: 26,
-        estimatedPeakMinutes: 442,
-        estimatedPeakTime: new Date('2026-11-01T15:22:00Z'),
-        actualPeakTime: new Date('2026-11-01T15:15:00Z'),
-        actualDurationMin: 435, // 7h15min (acelerou devido ao calor de 26°C)
-        growthMultiplier: 3.0,
-        aromaProfile: AromaProfile.FRUITY,
-        notes: 'Dia mais quente, atingiu quase o triplo do volume.',
-        fedAt: new Date('2026-11-01T08:00:00Z'),
-      },
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 50,
-        waterWeightG: 100,
-        flourWeightG: 100,
-        totalWeightG: 250,
-        ambientTempC: 24,
-        estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-10-31T16:00:00Z'),
-        actualPeakTime: new Date('2026-10-31T16:05:00Z'),
-        actualDurationMin: 485, // 8h05min
-        growthMultiplier: 2.7,
-        aromaProfile: AromaProfile.BALANCED,
-        notes: 'Estrutura de alvéolos muito consistente.',
-        fedAt: new Date('2026-10-31T08:00:00Z'),
-      },
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 50,
-        waterWeightG: 100,
-        flourWeightG: 100,
-        totalWeightG: 250,
-        ambientTempC: 23,
-        estimatedPeakMinutes: 500,
-        estimatedPeakTime: new Date('2026-10-30T16:20:00Z'),
-        actualPeakTime: new Date('2026-10-30T16:24:00Z'),
-        actualDurationMin: 504, // 8h24min (mais lento por estar 23°C)
-        growthMultiplier: 2.5,
-        aromaProfile: AromaProfile.BALANCED,
-        notes: 'Temperatura ambiente um pouco mais amena.',
-        fedAt: new Date('2026-10-30T08:00:00Z'),
-      },
-      {
-        starterId: voAmalia.id,
-        ratio: '1:2:2',
-        starterWeightG: 50,
-        waterWeightG: 100,
-        flourWeightG: 100,
-        totalWeightG: 250,
-        ambientTempC: 24,
-        estimatedPeakMinutes: 480,
-        estimatedPeakTime: new Date('2026-10-29T16:00:00Z'),
-        actualPeakTime: new Date('2026-10-29T16:00:00Z'),
-        actualDurationMin: 480, // 8h
-        growthMultiplier: 2.7,
-        aromaProfile: AromaProfile.BALANCED,
-        notes: 'Alimentação de rotina semanal.',
-        fedAt: new Date('2026-10-29T08:00:00Z'),
-      },
-    ],
-  });
-
-  console.log('Populando dados iniciais para Centeio e Levain Integral...');
-
-  // Centeio com 1 alimentação (proporção 1:2:2)
-  await prisma.feeding.create({
-    data: {
-      starterId: centeioSelvagem.id,
-      ratio: '1:2:2',
-      starterWeightG: 40,
-      waterWeightG: 80,
-      flourWeightG: 80,
-      totalWeightG: 200,
-      ambientTempC: 25,
-      estimatedPeakMinutes: 432,
-      estimatedPeakTime: new Date('2026-11-02T15:12:00Z'),
-      actualPeakTime: new Date('2026-11-02T14:40:00Z'),
-      actualDurationMin: 400,
-      growthMultiplier: 2.2,
-      aromaProfile: AromaProfile.ACIDIC,
-      fedAt: new Date('2026-11-02T08:00:00Z'),
+  const centeioFeedings = [
+    {
+      days: 1,
+      hours: 6,
+      temp: 26,
+      dur: 340,
+      vol: 1.8,
+      aroma: AromaProfile.ACIDIC,
+      notes: 'Cheiro pungente e perda rápida de sustentação.',
     },
-  });
+    {
+      days: 3,
+      hours: 8,
+      temp: 25,
+      dur: 360,
+      vol: 1.9,
+      aroma: AromaProfile.ACIDIC,
+      notes: 'Glúten degradando rápido.',
+    },
+  ];
 
-  // Levain Integral com 1 alimentação (sem pico registrado ainda - Cold Start)
+  for (const f of centeioFeedings) {
+    const fedTime = daysAgo(f.days, f.hours);
+    const peakTime = new Date(fedTime.getTime() + f.dur * 60 * 1000);
+
+    await prisma.feeding.create({
+      data: {
+        starterId: centeioSelvagem.id,
+        ratio: '1:2:2',
+        starterWeightG: 40,
+        waterWeightG: 80,
+        flourWeightG: 80,
+        totalWeightG: 200,
+        ambientTempC: f.temp,
+        estimatedPeakMinutes: 420,
+        estimatedPeakTime: peakTime,
+        actualPeakTime: peakTime,
+        actualDurationMin: f.dur,
+        growthMultiplier: f.vol,
+        aromaProfile: f.aroma,
+        notes: f.notes,
+        fedAt: fedTime,
+      },
+    });
+  }
+
+  console.log('Populando alimentação única para Levain Integral...');
+
+  const integralFedTime = daysAgo(1, 4);
   await prisma.feeding.create({
     data: {
       starterId: levainIntegral.id,
@@ -198,10 +213,12 @@ async function main() {
       totalWeightG: 150,
       ambientTempC: 24,
       estimatedPeakMinutes: 270,
-      estimatedPeakTime: new Date('2026-11-02T12:30:00Z'),
-      fedAt: new Date('2026-11-02T08:00:00Z'),
+      estimatedPeakTime: new Date(integralFedTime.getTime() + 270 * 60 * 1000),
+      fedAt: integralFedTime,
     },
   });
+
+  console.log('Seed executado com sucesso e datas atualizadas!');
 }
 
 main()

@@ -6,7 +6,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { StarterStatus } from 'src/generated/prisma/client';
+import { StarterStatus } from '../../generated/prisma/client';
 
 export class CreateStarterDto {
   @ApiProperty({

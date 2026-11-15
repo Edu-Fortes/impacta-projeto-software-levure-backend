@@ -12,6 +12,8 @@ enum StarterStatus {
   ACTIVE
   FRIDGE
   NEW
+  HEALTHY
+  ATTENTION
 }
 
 enum AromaProfile {
@@ -31,7 +33,8 @@ model Starter {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
-  feedings Feeding[]
+  feedings       Feeding[]
+  healthAnalyses HealthAnalysis[]
 
   @@map("starters")
 }
@@ -65,4 +68,28 @@ model Feeding {
   updatedAt DateTime @updatedAt
 
   @@map("feedings")
+}
+
+model HealthAnalysis {
+  id        String  @id @default(uuid())
+  starterId String
+  starter   Starter @relation(fields: [starterId], references: [id], onDelete: Cascade)
+
+  healthScore         Int // 0 a 100
+  status              String // EXCELLENT, GOOD, NEEDS_ATTENTION, CRITICAL
+  summary             String  @db.Text
+  vigorObservation    String  @db.Text
+  acidityObservation  String  @db.Text
+  temperatureImpact   String  @db.Text
+  readyToBake         Boolean
+  bakingReason        String  @db.Text
+  recommendedRatio    String
+  flourTypeHint       String
+  targetAmbientTemp   String
+  recommendationsJson Json // Array com [{ title, description, priority }]
+
+  analyzedFeedingsCount Int
+  createdAt             DateTime @default(now())
+
+  @@map("health_analyses")
 }

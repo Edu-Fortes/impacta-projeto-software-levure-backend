@@ -28,6 +28,7 @@ services:
     environment:
       DATABASE_URL: 'postgresql://postgres:postgrespassword@postgres:5432/levure_db?schema=public'
       PORT: 3001
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     depends_on:
       - postgres
     networks:
