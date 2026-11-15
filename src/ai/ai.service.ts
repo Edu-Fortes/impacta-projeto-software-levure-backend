@@ -218,4 +218,11 @@ ${JSON.stringify(payloadContext, null, 2)}`;
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  async getAnalysisHistory(starterId: string) {
+    return this.prisma.healthAnalysis.findMany({
+      where: { starterId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }

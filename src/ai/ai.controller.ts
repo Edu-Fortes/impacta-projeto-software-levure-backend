@@ -27,4 +27,17 @@ export class AiController {
   getLatest(@Param('starterId') starterId: string) {
     return this.aiService.getLatestAnalysis(starterId);
   }
+
+  @Get('analyses')
+  @ApiOperation({
+    summary:
+      'Recuperar histórico completo de análises de IA para este fermento',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Histórico de diagnósticos retornado com sucesso.',
+  })
+  getHistory(@Param('starterId') starterId: string) {
+    return this.aiService.getAnalysisHistory(starterId);
+  }
 }
