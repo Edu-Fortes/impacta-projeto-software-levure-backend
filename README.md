@@ -18,11 +18,14 @@ API RESTful desenvolvida para o gerenciamento, cálculo de ciclos e monitorament
 
 O backend segue a arquitetura modular do NestJS com separação estrita de responsabilidades:
 
-- `src/starters/`: Módulo de gestão de fermentos (CRUD completo, listagem com busca e sumário analítico do painel).
-- `src/feedings/`: Módulo de gerenciamento de alimentações (cálculo de proporções, registro transacional e listagem do histórico).
+- `src/starters/`: Módulo de gestão de fermentos (CRUD, busca reativa e métricas analíticas agregadas).
+- `src/feedings/`: Módulo de alimentações e rastreamento de pico (cálculo de proporções, histórico transacional e algoritmo adaptativo com correção térmica).
+- `src/ai/`: Módulo de diagnóstico inteligente integrado ao Google GenAI SDK (Gemini):
+  - `src/ai/ai.service.ts`: Consolidação de histórico, engenharia de prompt com resposta estruturada em JSON Schema e persistência de laudos.
+  - `src/ai/interfaces/`: Tipagem estrita da resposta da IA (score, observações biológicas, prontidão de fornada e prescrição de manejo).
 - `src/prisma/`: Camada de persistência e cliente global de banco de dados.
-- `prisma/schema.prisma`: Modelagem relacional (`Starter` e `Feeding` com relação 1:N).
-- `prisma/seed.ts`: Povoamento de dados iniciais demonstrativos com histórico de alimentações.
+- `prisma/schema.prisma`: Modelagem relacional (`Starter`, `Feeding` e `HealthAnalysis`).
+- `prisma/seed.ts`: Povoamento demonstrativo com histórico calibrado (Vó Amália com score 95) e caso de alerta de acidez (Centeio Selvagem com score 65).
 
 ---
 
@@ -31,6 +34,7 @@ O backend segue a arquitetura modular do NestJS com separação estrita de respo
 ### Pré-requisitos
 
 - [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/) instalados na máquina.
+- Chave do Gemini API gerada no [Google Studio](https://aistudio.google.com/welcome)
 
 ### Passo a Passo
 
@@ -42,14 +46,19 @@ O backend segue a arquitetura modular do NestJS com separação estrita de respo
    ```
 
 2. **Crie o arquivo `.env` na raiz do projeto. Copie e cole as variáveis de ambiente:**
-   ```bash
-   DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/levure_db?schema=public"
+
+   ```env
+   DATABASE_URL="postgresql://postgres:postgrespassword@postgres:5432/levure_db?schema=public"
    PORT=3001
+   GEMINI_API_KEY="SUA_CHAVE_API_GOOGLE_AI_STUDIO"
    ```
+
 3. **Suba os containers (PostgreSQL e NestJS):**
+
    ```bash
    docker compose up -d --build
    ```
+
 4. **Execute as migrations**:
    ```bash
    docker compose exec backend npx prisma migrate deploy
@@ -72,9 +81,10 @@ Caso prefira rodar apenas o banco no Docker e o NestJS nativamente:
    ```
 2. **Configure as variáveis de ambiente:**
    Crie um arquivo `.env` na raiz:
-   ```code snippet
-   DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/levure_db?schema=public"
+   ```env
+   DATABASE_URL="postgresql://postgres:postgrespassword@postgres:5432/levure_db?schema=public"
    PORT=3001
+   GEMINI_API_KEY="SUA_CHAVE_API_GOOGLE_AI_STUDIO"
    ```
 3. **Instale as dependências e gere o Prisma Client:**
 
