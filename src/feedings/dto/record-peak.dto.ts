@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AromaProfile } from 'src/generated/prisma/client';
+import { AromaProfile } from '../../generated/prisma/client';
 import {
   IsDateString,
   IsEnum,
